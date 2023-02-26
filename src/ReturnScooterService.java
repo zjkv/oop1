@@ -4,6 +4,7 @@ class ReturnScooterService {
         //metoda returnScooter ma 4 parametry - clientId, scooterId, where, minutes
         //resztę pobieramy na podstawię clientId i scooterId z bazy
         //(batteryLevel, Object[] scooterData, float clientCredit, boolean clientWithImmediatePayment, int immediateTransactionsCounter)
+        //kod celowo nie jest najpiękniejszy
 
         float unlocking = 0.0f;
         float pricePerMinute = 0.0f;
@@ -19,7 +20,6 @@ class ReturnScooterService {
         float priceAmountClientMultiplicationFactor = 0.9f;
         if (clientWithImmediatePayment) {
             priceAmountClientMultiplicationFactor = 0.9f;
-            immediateTransactionsCounter++;
         } else {
             priceAmountClientMultiplicationFactor = 1;
         }
