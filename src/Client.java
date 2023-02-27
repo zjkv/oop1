@@ -1,3 +1,5 @@
+import java.util.List;
+
 class Client {
 
     private Long clientId;
@@ -6,6 +8,7 @@ class Client {
     private boolean isImmediate;
     private int immediateTransactionsCounter;
     private float clientPriceMultiplier;
+    private List<String> monthlyPaymentDescriptions;
 
     Client(Long clientId, float clientCredit, int loyaltyPoints, boolean isImmediate, int immediateTransactionsCounter, float clientPriceMultiplier) {
         this.clientId = clientId;
@@ -20,6 +23,8 @@ class Client {
         float chargeAmount = Math.max(price - clientCredit, 0);
         if (isImmediate) {
             this.immediateTransactionsCounter++;
+        } else {
+            monthlyPaymentDescriptions.add(scooter.description());
         }
         return chargeAmount;
     }
@@ -28,7 +33,7 @@ class Client {
         int loyaltyPoints = 0;
         if (minutes > 15 && minutes < 50) {
             loyaltyPoints = 4;
-            if (clientPriceMultiplier < 1) {
+            if (isImmediate) {
                 loyaltyPoints = 2;
             }
         }
@@ -39,8 +44,7 @@ class Client {
         return loyaltyPoints;
     }
 
-    float getClientPriceMultiplier() {
-        return clientPriceMultiplier;
+    boolean isImmediate() {
+        return isImmediate;
     }
-
 }

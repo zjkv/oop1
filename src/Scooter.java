@@ -23,7 +23,9 @@ public class Scooter {
             pricePerMinute = (float) scooterData[4];
         }
         price = minutes * pricePerMinute + unlocking;
-        price = price * client.getClientPriceMultiplier();
+        if (client.isImmediate()) {
+            price = price * 0.9f;
+        }
         return price;
     }
 
@@ -34,4 +36,7 @@ public class Scooter {
         return scheduleForMaintenance;
     }
 
+    String description() {
+        return scooterId + " " + (String) scooterData[0];
+    }
 }
