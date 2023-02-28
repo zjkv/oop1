@@ -44,10 +44,10 @@ class ReturnScooterService {
         if (minutes >= 50 && chargeAmount > 30) {
             loyaltyPoints = 20;
         }
-        saveInDatabase(price, loyaltyPoints, chargeAmount, needsToChargeBattery, immediateTransactionsCounter);
+        saveInDatabase(loyaltyPoints, chargeAmount, needsToChargeBattery, immediateTransactionsCounter);
     }
 
-    private void saveInDatabase(float price, int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, int immediateTransactionsCounter) {
+    private void saveInDatabase(int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, int immediateTransactionsCounter) {
         //zapis wszystkigo do bazy danych
     }
 
