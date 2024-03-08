@@ -1,10 +1,11 @@
+import java.util.HashMap;
+
 class ReturnScooterService {
     void returnScooter(Long clientId, Long scooterId, Position where, int minutes) {
         //metoda returnScooter ma 4 parametry - clientId, scooterId, where, minutes
         //resztę pobieramy na podstawię clientId i scooterId z bazy
         //(batteryLevel, Object[] scooterData, float clientCredit, boolean clientWithImmediatePayment, int immediateTransactionsCounter)
         //kod celowo nie jest najpiękniejszy
-        // dodać mapę symulującą bazę
 
         Client client = new Client(clientId);
         Scooter scooter = new Scooter(scooterId);
