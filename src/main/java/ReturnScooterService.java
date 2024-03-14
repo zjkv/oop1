@@ -1,7 +1,5 @@
-import java.util.HashMap;
-
 class ReturnScooterService {
-    void returnScooter(Long clientId, Long scooterId, Position where, int minutes) {
+    void returnScooter(ClientId clientId, ScooterId scooterId, Position where, int minutes) {
         //metoda returnScooter ma 4 parametry - clientId, scooterId, where, minutes
         //resztę pobieramy na podstawię clientId i scooterId z bazy
         //(batteryLevel, Object[] scooterData, float clientCredit, boolean clientWithImmediatePayment, int immediateTransactionsCounter)
@@ -29,7 +27,7 @@ class ReturnScooterService {
         //zapis wszystkigo do bazy danych
     }
 
-    private void chargeClient(Long clientId, float chargeAmount) {
+    private void chargeClient(ClientId clientId, float chargeAmount) {
         //obciążenie karty kredytowej
     }
 
