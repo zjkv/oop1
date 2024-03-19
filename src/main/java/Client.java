@@ -16,7 +16,7 @@ public class Client {
     }
 
     void immediateTransactionsIncrease() {
-        immediateTransactionsCounter++;
+        new TransactionCounter(immediateTransactionsCounter).increment();
     }
 
 }

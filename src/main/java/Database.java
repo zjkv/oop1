@@ -19,4 +19,15 @@ class Database {
     public HashMap<String, Object> getData() {
         return data;
     }
+
+    public static Database saveInDatabase(int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, TransactionCounter immediateTransactionsCounter) {
+        var database = new Database();
+        var data = database.getData();
+        data.put("loyaltyPoints", loyaltyPoints);
+        data.put("chargeAmount", chargeAmount);
+        data.put("needsToChargeBattery", needsToChargeBattery);
+        data.put("immediateTransactionsCounter", immediateTransactionsCounter);
+
+        return database;
+    }
 }

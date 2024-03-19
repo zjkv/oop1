@@ -1,3 +1,5 @@
+import javax.xml.crypto.Data;
+
 class ReturnScooterService {
     void returnScooter(ClientId clientId, ScooterId scooterId, Position where, int minutes) {
         //metoda returnScooter ma 4 parametry - clientId, scooterId, where, minutes
@@ -15,16 +17,12 @@ class ReturnScooterService {
         chargeClient(client.clientId, chargeAmount);
         client.immediateTransactionsIncrease();
 
-        saveInDatabase(
+        Database.saveInDatabase(
                 Loyalty.calculate(minutes, price.priceAmountClientMultiplicationFactor, chargeAmount),
                 chargeAmount,
                 scooter.needsToChargeBattery(),
-                client.immediateTransactionsCounter
+                new TransactionCounter(client.immediateTransactionsCounter)
         );
-    }
-
-    private void saveInDatabase(int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, int immediateTransactionsCounter) {
-        //zapis wszystkigo do bazy danych
     }
 
     private void chargeClient(ClientId clientId, float chargeAmount) {
