@@ -1,9 +1,10 @@
+package service;
+
 public class PriceComponents {
 
     float unlocking = 0.0f;
     float pricePerMinute = 0.0f;
-
-    PriceComponents(Object[] scooterData) {
+    public PriceComponents(Object[] scooterData) {
         if (scooterData[0].equals("not_fast")) {
             unlocking = (float) scooterData[1];
             pricePerMinute = (float) scooterData[2];
@@ -13,6 +14,14 @@ public class PriceComponents {
         }
     }
 
+
+    public float getUnlocking() {
+        return unlocking;
+    }
+
+    public float getPricePerMinute() {
+        return pricePerMinute;
+    }
 
 }
 

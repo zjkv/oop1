@@ -1,5 +1,7 @@
+package service;
+
 public class Loyalty {
-    static int calculate(int minutes, float priceAmountClientMultiplicationFactor, float chargeAmount) {
+    public static int calculate(int minutes, float priceAmountClientMultiplicationFactor, float chargeAmount) {
         int loyaltyPoints = 0;
         if (minutes > 15 && minutes < 50) {
             loyaltyPoints = 4;

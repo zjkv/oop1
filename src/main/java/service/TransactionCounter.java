@@ -1,3 +1,5 @@
+package service;
+
 public class TransactionCounter {
 
     private int counter;

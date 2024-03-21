@@ -1,9 +1,19 @@
+package repository;
+
+import service.TransactionCounter;
+
 import java.util.HashMap;
 
-class Database {
+import static repository.TestDB.CHARGE_AMOUNT;
+import static repository.TestDB.IMMEDIATE_TRANSACTIONS_COUNTER;
+import static repository.TestDB.LOYALTY_POINTS;
+import static repository.TestDB.NEEDS_TO_CHARGE_BATTERY;
+
+public class Database {
+
     private HashMap<String, Object> data = new HashMap<>();
 
-    Database() {
+    public Database() {
         // client data
         data.put("clientId", 345);
         data.put("clientCredit", 123.23f);
@@ -23,10 +33,10 @@ class Database {
     public static Database saveInDatabase(int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, TransactionCounter immediateTransactionsCounter) {
         var database = new Database();
         var data = database.getData();
-        data.put("loyaltyPoints", loyaltyPoints);
-        data.put("chargeAmount", chargeAmount);
-        data.put("needsToChargeBattery", needsToChargeBattery);
-        data.put("immediateTransactionsCounter", immediateTransactionsCounter);
+        data.put(LOYALTY_POINTS, loyaltyPoints);
+        data.put(CHARGE_AMOUNT, chargeAmount);
+        data.put(NEEDS_TO_CHARGE_BATTERY, needsToChargeBattery);
+        data.put(IMMEDIATE_TRANSACTIONS_COUNTER, immediateTransactionsCounter);
 
         return database;
     }

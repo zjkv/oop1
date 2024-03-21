@@ -1,7 +1,8 @@
+import model.Battery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class BatteryTest {
+class BatteryTest extends BaseTest{
 
     @Test
     void shouldSetNeedsToChargeBatteryAccordingToBatteryLevelValue() {
@@ -14,7 +15,7 @@ class BatteryTest {
         Battery batteryWhichNotNeedsToBeCharged = new Battery(batteryLevelWhichNotNeedToBeCharged);
 
         //then
-        Assertions.assertTrue(batteryWhichNeedsToBeCharged.needsToChargeBattery);
-        Assertions.assertFalse(batteryWhichNotNeedsToBeCharged.needsToChargeBattery);
+        Assertions.assertTrue(batteryWhichNeedsToBeCharged.isNeedsToChargeBattery());
+        Assertions.assertFalse(batteryWhichNotNeedsToBeCharged.isNeedsToChargeBattery());
     }
 }
