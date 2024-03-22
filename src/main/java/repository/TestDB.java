@@ -59,7 +59,7 @@ public class TestDB {
         return getDb().get(scooterId);
     }
 
-    public HashMap<String, Object> updateClientData(Long clientId, HashMap<String, Object> data){
+    public HashMap<String, Object> storeClientData(Long clientId, HashMap<String, Object> data){
         //update data, ofc we can do here validation etc.
         return db.put(clientId, data);
     }

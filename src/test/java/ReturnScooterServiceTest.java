@@ -25,19 +25,17 @@ class ReturnScooterServiceTest extends BaseTest  {
         long latitude = 3L;
         int minutes = 15;
 
-        //when
-        new ReturnScooterService().returnScooter(clientId, scooterId, longitude, latitude, minutes, testDB); //I put there ref to test Db just to use only one. xD It is lets say quick fix
-
-        //
         int expectedLoyaltyPoints = 0;
         float expectedChargeAmount = 28f;
         boolean expectedNeedsToChargeBattery = true;
         int expectedTransactionCounter = 33;
-        //
 
+        //when
+        ReturnScooterService.returnScooter(clientId, scooterId, longitude, latitude, minutes, testDB); //I put there ref to test Db just to use only one. xD It is lets say quick fix
+
+
+        //then
         HashMap<String, Object> clientData = testDB.getClientData(clientId.id());
-
-
         assertEquals(expectedLoyaltyPoints, clientData.get(LOYALTY_POINTS));
         assertEquals(expectedChargeAmount, clientData.get(CHARGE_AMOUNT));
         assertEquals(expectedTransactionCounter, clientData.get(IMMEDIATE_TRANSACTIONS_COUNTER));

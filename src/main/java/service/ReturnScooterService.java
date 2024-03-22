@@ -2,16 +2,12 @@ package service;
 
 import model.Client;
 import model.ClientId;
-import model.Price;
-import model.Scooter;
 import model.ScooterId;
-import repository.Database;
 import repository.TestDB;
 
 import java.util.HashMap;
 
 import static repository.TestDB.CHARGE_AMOUNT;
-import static repository.TestDB.CLIENT_ID;
 import static repository.TestDB.CLIENT_WITH_IMMEDIATE_PAYMENT;
 import static repository.TestDB.IMMEDIATE_TRANSACTIONS_COUNTER;
 import static repository.TestDB.LOYALTY_POINTS;
@@ -20,7 +16,7 @@ import static repository.TestDB.SCOOTER_DATA;
 public class ReturnScooterService {
 
     private TestDB testDB = new TestDB();
-    public void returnScooter(ClientId clientId, ScooterId scooterId, long latitude, long  longitude, int minutes, TestDB testDB) {
+    public static void returnScooter(ClientId clientId, ScooterId scooterId, long latitude, long  longitude, int minutes, TestDB testDB) {
         //metoda returnScooter ma 4 parametry - clientId, scooterId, where, minutes
         //resztę pobieramy na podstawię clientId i scooterId z bazy
         //(batteryLevel, Object[] scooterData, float clientCredit, boolean clientWithImmediatePayment, int immediateTransactionsCounter)
@@ -46,7 +42,7 @@ public class ReturnScooterService {
         clientData.put(IMMEDIATE_TRANSACTIONS_COUNTER, client.getImmediateTransactionsCounter());
         clientData.put(LOYALTY_POINTS, Loyalty.calculate(minutes, priceAmountClientMultiplicationFactor, chargeAmount));
         clientData.put(CHARGE_AMOUNT, chargeAmount);
-        testDB.updateClientData(clientId.id(), clientData);
+        testDB.storeClientData(clientId.id(), clientData);
 /*
         Database.saveInDatabase(
                 Loyalty.calculate(minutes, price.getPriceAmountClientMultiplicationFactor(), chargeAmount),
@@ -56,7 +52,7 @@ public class ReturnScooterService {
         );*/
     }
 
-    private void chargeClient(ClientId clientId, float chargeAmount) {
+    private static void chargeClient(ClientId clientId, float chargeAmount) {
         //obciążenie karty kredytowej
     }
 
