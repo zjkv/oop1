@@ -1,8 +1,10 @@
-import model.Battery;
+package company.maintanace;
+
+import company.BaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class BatteryTest extends BaseTest{
+class BatteryTest extends BaseTest {
 
     @Test
     void shouldSetNeedsToChargeBatteryAccordingToBatteryLevelValue() {

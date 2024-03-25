@@ -1,12 +1,11 @@
-package model;
+package company.rental;
 
-import model.Battery;
-import model.ScooterId;
-import repository.Database;
+import company.maintanace.Battery;
+import company.repository.Database;
 
 import java.util.HashMap;
 
-public class Scooter {
+class Scooter {
 
     ScooterId scooterId;
 
@@ -23,7 +22,7 @@ public class Scooter {
     }
 
     public boolean needsToChargeBattery() {
-        return new Battery(batteryLevel).needsToChargeBattery;
+        return new Battery(batteryLevel).isNeedsToChargeBattery();
     }
 
     public ScooterId getScooterId() {

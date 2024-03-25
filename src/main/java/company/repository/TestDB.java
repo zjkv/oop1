@@ -1,4 +1,4 @@
-package repository;
+package company.repository;
 
 import java.util.HashMap;
 

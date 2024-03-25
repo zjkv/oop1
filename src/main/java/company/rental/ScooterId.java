@@ -1,4 +1,4 @@
-package model;
+package company.rental;
 
 public record ScooterId(Long id) {
     public ScooterId {

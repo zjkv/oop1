@@ -1,9 +1,10 @@
-package service;
+package company.rental;
 
-public class PriceComponents {
+class PriceComponents {
 
-    float unlocking = 0.0f;
-    float pricePerMinute = 0.0f;
+    float unlocking = 0.0f;  //Can by value object
+    float pricePerMinute = 0.0f; //Can by value object
+
     public PriceComponents(Object[] scooterData) {
         if (scooterData[0].equals("not_fast")) {
             unlocking = (float) scooterData[1];

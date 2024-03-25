@@ -1,13 +1,8 @@
-package repository;
+package company.repository;
 
-import service.TransactionCounter;
+import company.loyality.TransactionCounter;
 
 import java.util.HashMap;
-
-import static repository.TestDB.CHARGE_AMOUNT;
-import static repository.TestDB.IMMEDIATE_TRANSACTIONS_COUNTER;
-import static repository.TestDB.LOYALTY_POINTS;
-import static repository.TestDB.NEEDS_TO_CHARGE_BATTERY;
 
 public class Database {
 
@@ -33,10 +28,10 @@ public class Database {
     public static Database saveInDatabase(int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, TransactionCounter immediateTransactionsCounter) {
         var database = new Database();
         var data = database.getData();
-        data.put(LOYALTY_POINTS, loyaltyPoints);
-        data.put(CHARGE_AMOUNT, chargeAmount);
-        data.put(NEEDS_TO_CHARGE_BATTERY, needsToChargeBattery);
-        data.put(IMMEDIATE_TRANSACTIONS_COUNTER, immediateTransactionsCounter);
+        data.put(TestDB.LOYALTY_POINTS, loyaltyPoints);
+        data.put(TestDB.CHARGE_AMOUNT, chargeAmount);
+        data.put(TestDB.NEEDS_TO_CHARGE_BATTERY, needsToChargeBattery);
+        data.put(TestDB.IMMEDIATE_TRANSACTIONS_COUNTER, immediateTransactionsCounter);
 
         return database;
     }

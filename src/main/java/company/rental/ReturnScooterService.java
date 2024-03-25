@@ -1,22 +1,25 @@
-package service;
+package company.rental;
 
-import model.Client;
-import model.ClientId;
-import model.ScooterId;
-import repository.TestDB;
+import company.Client;
+import company.ClientId;
+import company.UsageTime;
+import company.loyality.Loyalty;
+import company.maintanace.Position;
+import company.repository.TestDB;
 
 import java.util.HashMap;
 
-import static repository.TestDB.CHARGE_AMOUNT;
-import static repository.TestDB.CLIENT_WITH_IMMEDIATE_PAYMENT;
-import static repository.TestDB.IMMEDIATE_TRANSACTIONS_COUNTER;
-import static repository.TestDB.LOYALTY_POINTS;
-import static repository.TestDB.SCOOTER_DATA;
+import static company.repository.TestDB.CHARGE_AMOUNT;
+import static company.repository.TestDB.CLIENT_WITH_IMMEDIATE_PAYMENT;
+import static company.repository.TestDB.IMMEDIATE_TRANSACTIONS_COUNTER;
+import static company.repository.TestDB.LOYALTY_POINTS;
+import static company.repository.TestDB.SCOOTER_DATA;
 
 public class ReturnScooterService {
 
-    private TestDB testDB = new TestDB();
-    public static void returnScooter(ClientId clientId, ScooterId scooterId, long latitude, long  longitude, int minutes, TestDB testDB) {
+    private final TestDB testDB = new TestDB();
+
+    public static void returnScooter(ClientId clientId, ScooterId scooterId, Position position, UsageTime minutes, TestDB testDB) {
         //metoda returnScooter ma 4 parametry - clientId, scooterId, where, minutes
         //resztę pobieramy na podstawię clientId i scooterId z bazy
         //(batteryLevel, Object[] scooterData, float clientCredit, boolean clientWithImmediatePayment, int immediateTransactionsCounter)
@@ -58,7 +61,3 @@ public class ReturnScooterService {
 
 }
 
-class Position {
-    private float latitude;
-    private float longitude;
-}

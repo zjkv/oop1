@@ -1,4 +1,4 @@
-package model;
+package company.maintanace;
 
 public class Battery {
 

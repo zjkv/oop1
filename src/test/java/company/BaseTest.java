@@ -1,9 +1,11 @@
+package company;
+
+import company.repository.TestDB;
 import org.junit.jupiter.api.BeforeEach;
-import repository.TestDB;
 
 public abstract class BaseTest {
 
-    TestDB testDB;
+    protected TestDB testDB;
 
     @BeforeEach
     public void setUp() {
