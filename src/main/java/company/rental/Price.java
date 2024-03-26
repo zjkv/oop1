@@ -1,7 +1,5 @@
 package company.rental;
 
-import company.UsageTime;
-
 class Price {
     private final float priceAmountClientMultiplicationFactor;
 

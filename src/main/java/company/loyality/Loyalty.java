@@ -1,12 +1,12 @@
 package company.loyality;
 
 
-import company.UsageTime;
+import company.rental.UsageTime;
 
 public class Loyalty {
 
     //potencial bad implementation, because scooter service need to use that method. It should be used only in the scope of this package.
-    protected static int calculate(UsageTime minutes, float priceAmountClientMultiplicationFactor, float chargeAmount) {
+    public static int calculate(UsageTime minutes, float priceAmountClientMultiplicationFactor, float chargeAmount) {
         int loyaltyPoints = 0;
         if (minutes.minutes() > 15 && minutes.minutes() < 50) {
             loyaltyPoints = 4;

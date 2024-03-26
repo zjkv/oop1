@@ -1,7 +1,5 @@
 package company.rental;
 
-import company.UsageTime;
-
 class PriceCalculator {
 
     //returned value should be value object because price cannot be less then 0

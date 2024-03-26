@@ -1,4 +1,4 @@
-package company;
+package company.rental;
 
 public record UsageTime(Integer minutes) {
     public UsageTime {

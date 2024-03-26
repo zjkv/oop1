@@ -2,7 +2,6 @@ package company.rental;
 
 import company.Client;
 import company.ClientId;
-import company.UsageTime;
 import company.loyality.Loyalty;
 import company.maintanace.Position;
 import company.repository.TestDB;

@@ -2,7 +2,6 @@ package company.rental;
 
 import company.BaseTest;
 import company.ClientId;
-import company.UsageTime;
 import company.maintanace.Latitude;
 import company.maintanace.Longitude;
 import company.maintanace.Position;
@@ -23,7 +22,7 @@ class ReturnScooterServiceTest extends BaseTest {
         //given
         ClientId clientId = new ClientId(1L);
         ScooterId scooterId = new ScooterId(100L);
-        Longitude longitude = new Longitude(16F);
+        Longitude longitude = new Longitude(1F);
         Latitude latitude = new Latitude(50F);
         UsageTime minutes = new UsageTime(15);
 
