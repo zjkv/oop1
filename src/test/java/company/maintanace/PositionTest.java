@@ -21,6 +21,34 @@ class PositionTest {
 
     }
 
+    @Test
+    void shouldThrowExceptionWhenCordsNotFromPolandWhenLatIsOk() {
+        //given
+        Longitude longitude = new Longitude(2F); //Cords not from poland
+        Latitude latitude = new Latitude(50F);
+
+        //expected
+        var exception = assertThrows(RuntimeException.class,
+                () -> new Position(latitude, longitude));
+        //check error message:
+        assertEquals("Coordinates not from Poland", exception.getMessage());
+
+    }
+
+    @Test
+    void shouldThrowExceptionWhenCordsNotFromPolandWhenLonIsOk() {
+        //given
+        Longitude longitude = new Longitude(15F); //Cords not from poland
+        Latitude latitude = new Latitude(1F);
+
+        //expected
+        var exception = assertThrows(RuntimeException.class,
+                () -> new Position(latitude, longitude));
+        //check error message:
+        assertEquals("Coordinates not from Poland", exception.getMessage());
+
+    }
+
     //OFC below test can be excluded to separated clases
     @Test
     void shouldThrowExceptionWhenLatitiudeIsNull() {

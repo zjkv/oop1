@@ -22,7 +22,7 @@ class ReturnScooterServiceTest extends BaseTest {
         //given
         ClientId clientId = new ClientId(1L);
         ScooterId scooterId = new ScooterId(100L);
-        Longitude longitude = new Longitude(1F);
+        Longitude longitude = new Longitude(15F);
         Latitude latitude = new Latitude(50F);
         UsageTime minutes = new UsageTime(15);
 
