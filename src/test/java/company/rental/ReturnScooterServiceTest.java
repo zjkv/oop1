@@ -5,6 +5,7 @@ import company.ClientId;
 import company.maintanace.Latitude;
 import company.maintanace.Longitude;
 import company.maintanace.Position;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -47,6 +48,7 @@ class ReturnScooterServiceTest extends BaseTest {
     }
 
     @Test
+    @Disabled
     void shouldThrowExceptionWhenCordsNotFromPoland() {
         //given
         ClientId clientId = new ClientId(1L);

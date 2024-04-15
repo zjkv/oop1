@@ -5,11 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class BaseTest {
 
-    protected TestDB testDB;
+    protected TestDB testDB = new TestDB();
 
     @BeforeEach
     public void setUp() {
-        testDB = new TestDB();
+        testDB = testDB.setUp();
     }
 
 }
