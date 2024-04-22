@@ -39,7 +39,7 @@ public class ReturnScooterService {
 
         chargeClient(clientId, chargeAmount);
 
-        Client client = new Client(clientId); //this should be get from db, in place of 31 line
+        Client client = new Client(clientId, false); //this should be get from db, in place of 31 line
         client.immediateTransactionsIncrease();
         clientData.put(IMMEDIATE_TRANSACTIONS_COUNTER, client.getImmediateTransactionsCounter());
         clientData.put(LOYALTY_POINTS, Loyalty.calculate(minutes, priceAmountClientMultiplicationFactor, chargeAmount));

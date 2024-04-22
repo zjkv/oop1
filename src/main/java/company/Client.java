@@ -10,14 +10,18 @@ import static company.repository.TestDB.CLIENT_WITH_IMMEDIATE_PAYMENT;
 import static company.repository.TestDB.IMMEDIATE_TRANSACTIONS_COUNTER;
 
 public class Client {
-    ClientId clientId;
-    float clientCredit;
+    final ClientId clientId;
 
-    boolean clientWithImmediatePayment;
+    final float clientCredit;
 
-    TransactionCounter immediateTransactionsCounter;
+    final boolean clientWithImmediatePayment;
 
-    public Client(ClientId clientId) {
+    final boolean hasSubscription;
+
+    final TransactionCounter immediateTransactionsCounter;
+
+    public Client(ClientId clientId, boolean hasSubscription) {
+        this.hasSubscription = hasSubscription;
         TestDB testDB = new TestDB();
         HashMap<Long, HashMap<String, Object>> database = testDB.getDb();
         this.clientId = clientId;
@@ -48,5 +52,9 @@ public class Client {
 
     public int getImmediateTransactionsCounter() {
         return immediateTransactionsCounter.getCounter();
+    }
+
+    public boolean isSubscriptionType() {
+        return this.hasSubscription;
     }
 }
