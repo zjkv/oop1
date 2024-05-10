@@ -1,6 +1,6 @@
 package company.rental;
 
-public record PriceFactor(double priceFactor) {
+public record PriceFactor(Double priceFactor) {
 
     public PriceFactor {
         if (priceFactor < 0) {

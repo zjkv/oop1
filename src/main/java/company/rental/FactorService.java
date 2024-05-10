@@ -14,10 +14,11 @@ public class FactorService {
     }
 
     //Calculate but TBH it is only getting value from DB.
-    public PriceFactor calculateFactor(int activeSessionsNumber) {
+    public PriceFactor calculateFactor(int currentlyActiveSessionNumber) {
         HashMap<String, Object> priceConfig = testDB.getPriceConfig();
 
+        int sessionNumberWhichWouldBeCreated = ++currentlyActiveSessionNumber;
 
-        return new PriceFactor((Double) priceConfig.getOrDefault(String.valueOf(activeSessionsNumber), DEFAULT_SESSION_FACTOR));
+        return new PriceFactor((Double) priceConfig.getOrDefault(String.valueOf(sessionNumberWhichWouldBeCreated), DEFAULT_SESSION_FACTOR));
     }
 }

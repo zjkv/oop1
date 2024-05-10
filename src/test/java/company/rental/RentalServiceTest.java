@@ -21,6 +21,9 @@ class RentalServiceTest {
     FactorService factorServiceMock;
 
     @Mock
+    PriceCalculator priceCalculatorMock;
+
+    @Mock
     TestDB testDB;
 
     @Test
@@ -28,7 +31,7 @@ class RentalServiceTest {
         ClientId clientId = new ClientId(1L);
         ScooterId scooterId = new ScooterId(100L);
         int numberOfActiveSessions = 1;
-        RentalService rentalService = new RentalService(sessionServiceMock, testDB, factorServiceMock);
+        RentalService rentalService = new RentalService(sessionServiceMock, testDB, factorServiceMock, priceCalculatorMock);
 
         when(sessionServiceMock.getActiveClientSessionsNumber(clientId)).thenReturn(numberOfActiveSessions);
 

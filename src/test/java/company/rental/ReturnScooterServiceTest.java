@@ -25,7 +25,7 @@ class ReturnScooterServiceTest extends BaseTest {
         ScooterId scooterId = new ScooterId(100L);
         Longitude longitude = new Longitude(15F);
         Latitude latitude = new Latitude(50F);
-        UsageTime minutes = new UsageTime(15);
+        UsageTime minutes = new UsageTime(15l);
 
         Position position = new Position(latitude, longitude); //Position Value object
 
@@ -55,7 +55,7 @@ class ReturnScooterServiceTest extends BaseTest {
         ScooterId scooterId = new ScooterId(100L);
         Longitude longitude = new Longitude(2F); //Cords not from poland
         Latitude latitude = new Latitude(3F);
-        UsageTime minutes = new UsageTime(15);
+        UsageTime minutes = new UsageTime(15l);
 
         //line bellow thorw exception
         Position position = new Position(latitude, longitude); //Position Value object

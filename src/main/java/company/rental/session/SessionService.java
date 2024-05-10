@@ -8,6 +8,7 @@ import company.repository.TestDB;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static company.repository.TestDB.ACTIVE_SESSIONS;
 import static company.repository.TestDB.CLIENT_LIST;
@@ -45,6 +46,26 @@ public class SessionService {
         scooterData.put(CLIENT_LIST, clientIdList);
 
         testDB.storeScooterData(scooterId.id(), scooterData);
+
+    }
+
+    public Session closeSession(ClientId clientId, ScooterId scooterId) {
+        HashMap<String, Object> clientData = testDB.getClientData(clientId.id());
+        List<Session> activeSessions = (List<Session>) clientData.get(ACTIVE_SESSIONS);
+
+        Optional<Session> sessionToClose = activeSessions.stream().filter(session -> session.scooterId().equals(scooterId)).findAny();
+
+        if (sessionToClose.isPresent()) {
+            Session session = sessionToClose.get();
+            Session closedSession = Session.closeSession(session);
+            activeSessions.remove(session);
+
+            clientData.put(ACTIVE_SESSIONS, activeSessions);
+            testDB.storeClientData(clientId.id(), clientData);
+            return closedSession;
+        } else {
+            throw new RuntimeException("Session doesn't exist");
+        }
 
     }
 

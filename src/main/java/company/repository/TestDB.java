@@ -1,10 +1,12 @@
 package company.repository;
 
 import company.ClientId;
+import company.rental.ScooterId;
 import company.rental.session.Session;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 //Generic db, Let say it is nosql db. Yoiu can get object data by its id
 public class TestDB {
@@ -72,6 +74,16 @@ public class TestDB {
 
         db.put(priceConfigId, priceConfigData);
 
+
+        //Put default price per minute
+
+        var pricePerMinuteId = 22222L;
+        var pricePerMinute = 10.0f;
+        HashMap<String, Object> pricePerMinuteConfig = new HashMap<>();
+        pricePerMinuteConfig.put("DEFAULT", pricePerMinute);
+
+        db.put(pricePerMinuteId, pricePerMinuteConfig);
+
         return this;
     }
 
@@ -79,7 +91,7 @@ public class TestDB {
         return db;
     }
 
-    public HashMap<String, Object> getClientData(Long clientId){
+    public HashMap<String, Object> getClientData(Long clientId) {
         //check if exist etc..
         return getDb().get(clientId);
     }
@@ -107,5 +119,17 @@ public class TestDB {
     //Hardoced Value
     public HashMap<String, Object> getPriceConfig() {
         return getDb().get(11111L);
+
+
+    }
+
+    public float getDefaultPrice() {
+        return (float) getDb().get(22222L).get("DEFAULT");
+    }
+
+    public Session getActiveSessionByClientAndScooterId(ClientId clientId, ScooterId scooterId) {
+        //check if exist etc..
+        Optional<Session> activeSession = getClientActiveSession(clientId.id()).stream().filter(session -> session.scooterId().id().equals(scooterId.id())).findFirst();
+        return activeSession.orElseThrow(() -> new RuntimeException("Session dosen't exist"));
     }
 }
