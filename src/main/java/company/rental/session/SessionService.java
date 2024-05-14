@@ -22,7 +22,7 @@ public class SessionService {
     }
 
     //transactional
-    public void createSession(ClientId clientId, ScooterId scooterId, PriceFactor priceFactor) {
+    public Session createSession(ClientId clientId, ScooterId scooterId, PriceFactor priceFactor) {
 
         HashMap<String, Object> clientData = testDB.getClientData(clientId.id());
         var newSession = Session.createSession(scooterId, clientId, priceFactor.priceFactor());
@@ -46,6 +46,8 @@ public class SessionService {
         scooterData.put(CLIENT_LIST, clientIdList);
 
         testDB.storeScooterData(scooterId.id(), scooterData);
+
+        return newSession;
 
     }
 

@@ -2,6 +2,9 @@ package company.rental;
 
 import company.BaseTest;
 import company.ClientId;
+import company.rental.rentGroup.RentGroupId;
+import company.rental.rentGroup.TImeBonusCalculator;
+import company.rental.rentGroup.TimeBonus;
 import company.rental.session.Session;
 import company.rental.session.SessionService;
 import org.junit.jupiter.api.Test;
@@ -9,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,7 +26,11 @@ class RentalServiceTestIT extends BaseTest {
 
     private final PriceCalculator priceCalculator;
 
+    private final TImeBonusCalculator tImeBonusCalculator;
+
     ClientId clientId = new ClientId(1L);
+
+    RentGroupId rentGroupId = new RentGroupId(11L);
     ScooterId scooterId1 = new ScooterId(101L);
     ScooterId scooterId2 = new ScooterId(102L);
     ScooterId scooterId3 = new ScooterId(103L);
@@ -34,7 +42,80 @@ class RentalServiceTestIT extends BaseTest {
         this.sessionService = new SessionService(testDB);
         this.factorService = new FactorService(testDB);
         this.priceCalculator = new PriceCalculator(testDB);
-        this.rentalService = new RentalService(sessionService, testDB, factorService, priceCalculator);
+        this.tImeBonusCalculator = new TImeBonusCalculator(testDB);
+        this.rentalService = new RentalService(sessionService, testDB, factorService, priceCalculator, tImeBonusCalculator);
+    }
+
+    @Test
+    void shouldCreateGroupRentWith2SessionsWithoutBonus() {
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId1);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId2);
+
+        ArrayList<Session> rentGroupSessions = testDB.getRentGroupSessions(rentGroupId.id());
+        TimeBonus rentGroupMinutesBonus = testDB.getRentGroupMinutesBonus(rentGroupId.id());
+
+        assertEquals(2, rentGroupSessions.size());
+        assertEquals(0, rentGroupMinutesBonus.minutesBonus());
+    }
+
+    @Test
+    void shouldCreateGroupRentWith2SessionsWithoutBonusAndPayStandardPrice() throws InterruptedException {
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId1);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId2);
+
+
+        Thread.sleep(2000); //test are too fast
+
+        RentPrice rentPriceSession1 = rentalService.returnScooterFromGroup(clientId, rentGroupId, scooterId1);
+        RentPrice rentPriceSession2 = rentalService.returnScooterFromGroup(clientId, rentGroupId, scooterId2);
+
+        assertEquals(10, rentPriceSession1.rentPrice());
+        assertEquals(10, rentPriceSession2.rentPrice());
+    }
+
+    @Test
+    void shouldCreateGroupRentWith3SessionsWithoutBonusAndPayStandardPriceOnlyForTwoOfThem() throws InterruptedException {
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId1);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId2);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId3);
+
+
+        Thread.sleep(2000); //test are too fast
+
+        RentPrice rentPriceSession1 = rentalService.returnScooterFromGroup(clientId, rentGroupId, scooterId1);
+        RentPrice rentPriceSession2 = rentalService.returnScooterFromGroup(clientId, rentGroupId, scooterId2);
+        RentPrice rentPriceSession3 = rentalService.returnScooterFromGroup(clientId, rentGroupId, scooterId3);
+
+        assertEquals(10, rentPriceSession1.rentPrice());
+        assertEquals(10, rentPriceSession2.rentPrice());
+        assertEquals(0, rentPriceSession3.rentPrice()); //Bonus is 5 minutes - they were in use only by seconds, so 3 should be for free
+    }
+
+    @Test
+    void shouldCreateGroupRentWith3SessionsWith5MinBonus() {
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId1);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId2);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId3);
+
+        ArrayList<Session> rentGroupSessions = testDB.getRentGroupSessions(rentGroupId.id());
+        TimeBonus rentGroupMinutesBonus = testDB.getRentGroupMinutesBonus(rentGroupId.id());
+
+        assertEquals(3, rentGroupSessions.size());
+        assertEquals(5, rentGroupMinutesBonus.minutesBonus());
+    }
+
+    @Test
+    void shouldCreateGroupRentWith4SessionsWith10MinBonus() {
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId1);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId2);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId3);
+        rentalService.rentGroupsOfScooters(clientId, rentGroupId, scooterId4);
+
+        ArrayList<Session> rentGroupSessions = testDB.getRentGroupSessions(rentGroupId.id());
+        TimeBonus rentGroupMinutesBonus = testDB.getRentGroupMinutesBonus(rentGroupId.id());
+
+        assertEquals(3, rentGroupSessions.size());
+        assertEquals(10, rentGroupMinutesBonus.minutesBonus());
     }
 
     @Test

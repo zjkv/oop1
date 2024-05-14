@@ -1,6 +1,7 @@
 package company.rental;
 
 import company.ClientId;
+import company.rental.rentGroup.TImeBonusCalculator;
 import company.rental.session.SessionService;
 import company.repository.TestDB;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,9 @@ class RentalServiceTest {
     PriceCalculator priceCalculatorMock;
 
     @Mock
+    TImeBonusCalculator tImeBonusCalculator;
+
+    @Mock
     TestDB testDB;
 
     @Test
@@ -31,7 +35,7 @@ class RentalServiceTest {
         ClientId clientId = new ClientId(1L);
         ScooterId scooterId = new ScooterId(100L);
         int numberOfActiveSessions = 1;
-        RentalService rentalService = new RentalService(sessionServiceMock, testDB, factorServiceMock, priceCalculatorMock);
+        RentalService rentalService = new RentalService(sessionServiceMock, testDB, factorServiceMock, priceCalculatorMock, tImeBonusCalculator);
 
         when(sessionServiceMock.getActiveClientSessionsNumber(clientId)).thenReturn(numberOfActiveSessions);
 

@@ -2,6 +2,7 @@ package company.repository;
 
 import company.ClientId;
 import company.rental.ScooterId;
+import company.rental.rentGroup.TimeBonus;
 import company.rental.session.Session;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Optional;
 //Generic db, Let say it is nosql db. Yoiu can get object data by its id
 public class TestDB {
     public static final String CLIENT_ID = "clientId";
+    public static final String RENT_GROUP_ID = "rentGroupId";
     public static final String SCOOTER_DATA = "scooterData";
     public static final String CLIENT_WITH_IMMEDIATE_PAYMENT = "clientWithImmediatePayment";
     public static final String CLIENT_CREDIT = "clientCredit";
@@ -22,6 +24,10 @@ public class TestDB {
     public static final String CHARGE_AMOUNT = "chargeAmount";
     public static final String NEEDS_TO_CHARGE_BATTERY = "needsToChargeBattery";
     public static final String ACTIVE_SESSIONS = "activeSessions";
+
+    public static final String GROUP_SESSIONS = "groupSessions";
+
+    public static final String GROUP_MINUTES_BONUS = "groupMinutesBonus";
 
     public static final String SESSION_PRICE_FACTOR = "sessionPriceFactor";
 
@@ -75,6 +81,22 @@ public class TestDB {
         db.put(priceConfigId, priceConfigData);
 
 
+        var timeConfigId = 222222L;
+        HashMap<String, Object> timeConfigData = new HashMap<>();
+        //NUMBER OF USERS / Time Bonus in min
+/*        Cena za przejazd zależna od ilości wynajętych hulajnóg w grupie:
+        przy 2 osobach nic sie nie dzieje, cena wyliczamy tak samo.
+         przy 3 osobach 5 min gratis na jedną hulajnogę
+        przy 4 osobach 10 min gratis na jedną hulajnogę
+        przy 5 osobach 15 min gratis na jedną hulajnogę
+        przy 6 osobach jedna hulajnoga gratis bez względu na czas*/
+        timeConfigData.put("3", 5);
+        timeConfigData.put("4", 10);
+        timeConfigData.put("5", 15);
+        timeConfigData.put("6", 999999999);
+
+        db.put(timeConfigId, timeConfigData);
+
         //Put default price per minute
 
         var pricePerMinuteId = 22222L;
@@ -116,11 +138,34 @@ public class TestDB {
         return (ArrayList<Session>) getDb().get(clientId).get(ACTIVE_SESSIONS);
     }
 
+
+    public HashMap<String, Object> getRentGroupSessionsObject(Long rentGroupId) {
+        //check if exist etc..
+        return getDb().getOrDefault(rentGroupId, new HashMap<>());
+    }
+
+    public ArrayList<Session> getRentGroupSessions(Long rentGroupId) {
+
+        return (ArrayList<Session>) getRentGroupSessionsObject(rentGroupId).getOrDefault(GROUP_SESSIONS, new ArrayList<>());
+    }
+
+    public TimeBonus getRentGroupMinutesBonus(Long rentGroupId) {
+
+        return new TimeBonus((Integer) getRentGroupSessionsObject(rentGroupId).getOrDefault(GROUP_MINUTES_BONUS, 0));
+    }
+
+    public HashMap<String, Object> storeRentGroupData(Long rentGroupId, HashMap<String, Object> data) {
+        //update data, ofc we can do here validation etc.
+        return db.put(rentGroupId, data);
+    }
+
     //Hardoced Value
     public HashMap<String, Object> getPriceConfig() {
         return getDb().get(11111L);
+    }
 
-
+    public HashMap<String, Object> getTimeBonusConfig() {
+        return getDb().get(222222L);
     }
 
     public float getDefaultPrice() {
