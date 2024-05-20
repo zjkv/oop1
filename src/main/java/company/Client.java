@@ -5,9 +5,7 @@ import company.repository.TestDB;
 
 import java.util.HashMap;
 
-import static company.repository.TestDB.CLIENT_CREDIT;
-import static company.repository.TestDB.CLIENT_WITH_IMMEDIATE_PAYMENT;
-import static company.repository.TestDB.IMMEDIATE_TRANSACTIONS_COUNTER;
+import static company.repository.TestDB.*;
 
 public class Client {
     final ClientId clientId;
@@ -16,12 +14,15 @@ public class Client {
 
     final boolean clientWithImmediatePayment;
 
-    final boolean hasSubscription;
+    final Subscription subscription;
 
     final TransactionCounter immediateTransactionsCounter;
 
-    public Client(ClientId clientId, boolean hasSubscription) {
-        this.hasSubscription = hasSubscription;
+//    final RideAmount rideAmount;
+
+
+    public Client(ClientId clientId) {
+
         TestDB testDB = new TestDB();
         HashMap<Long, HashMap<String, Object>> database = testDB.getDb();
         this.clientId = clientId;
@@ -29,11 +30,8 @@ public class Client {
         this.clientCredit = (float) clientData.get(CLIENT_CREDIT);
         this.clientWithImmediatePayment = (boolean) clientData.get(CLIENT_WITH_IMMEDIATE_PAYMENT);
         this.immediateTransactionsCounter = new TransactionCounter((int) clientData.get(IMMEDIATE_TRANSACTIONS_COUNTER));
+        this.subscription = (Subscription) clientData.get(SUBSCRIPTION);
     }
-
-/*    public void immediateTransactionsIncrease() {
-        new TransactionCounter(immediateTransactionsCounter).increment(); //What is happening here BARTEK. you increment value but not store it anywhere. xD
-    }*/
 
     public void immediateTransactionsIncrease() {
         immediateTransactionsCounter.increment();
@@ -54,7 +52,7 @@ public class Client {
         return immediateTransactionsCounter.getCounter();
     }
 
-    public boolean isSubscriptionType() {
-        return this.hasSubscription;
+    public Subscription getSubscription() {
+        return subscription;
     }
 }

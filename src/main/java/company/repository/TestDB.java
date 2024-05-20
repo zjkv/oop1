@@ -1,6 +1,11 @@
 package company.repository;
 
+import company.Subscription;
+
 import java.util.HashMap;
+
+import static company.Subscription.TEN_TO_NINETEEN;
+import static company.Subscription.ZERO_TO_NINE;
 
 //Generic db, Let say it is nosql db. Yoiu can get object data by its id
 public class TestDB {
@@ -9,6 +14,8 @@ public class TestDB {
     public static final String CLIENT_WITH_IMMEDIATE_PAYMENT = "clientWithImmediatePayment";
     public static final String CLIENT_CREDIT = "clientCredit";
     public static final String IMMEDIATE_TRANSACTIONS_COUNTER = "immediateTransactionsCounter";
+    public static final String SUBSCRIPTION = "subscription";
+
     public static final String SCOOTER_ID = "scooterId";
     public static final String BATTERY_LEVEL = "batteryLevel";
 
@@ -29,6 +36,7 @@ public class TestDB {
         clientData.put(CLIENT_CREDIT, 123.23f);
         clientData.put(CLIENT_WITH_IMMEDIATE_PAYMENT, true);
         clientData.put(IMMEDIATE_TRANSACTIONS_COUNTER, 32);
+        clientData.put(SUBSCRIPTION, TEN_TO_NINETEEN);
 
         // load client data db
         db.put(clientId, clientData);

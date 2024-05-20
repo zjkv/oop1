@@ -1,6 +1,7 @@
 package company.rental;
 
 import company.BaseTest;
+import company.Client;
 import company.ClientId;
 import company.maintanace.Latitude;
 import company.maintanace.Longitude;
@@ -73,23 +74,6 @@ class ReturnScooterServiceTest extends BaseTest {
 
     @Test
     void shouldApplyDiscountBasedOnClientSubscriptionType() {
-        // given
-        // client jest typu subskrypcyjnego
-        // przejazd jest od 1 do 9
-
-        // when
-        // wyliczamy cene za przejazd
-        //
-
-
-
-
-        // then
-        // dla klienta subskrypcyjnego jest appliowana znizka 100% - przejazd gratis z powodu subskrpycji i darmowych przejazdow do 9
-    }
-
-    @Test
-    void shouldApplyDiscountBasedOnClientSubscriptionType2() {
         // given
         // client jest typu subskrypcyjnego
         // przejazd jest od 1 do 9
