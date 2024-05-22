@@ -2,6 +2,7 @@ package company.repository;
 
 import company.ClientId;
 import company.rental.RentSession;
+import company.rental.RidesAmount;
 import company.rental.ScooterId;
 
 import java.util.ArrayList;
@@ -82,9 +83,9 @@ public class TestDB {
         return getDb().get(scooterId);
     }
 
-    public int getFinishedRentSessionsAmount(HashMap<String, Object> clientData) {
+    public RidesAmount getFinishedRentSessionsAmount(HashMap<String, Object> clientData) {
         var finishedSessions = (ArrayList<RentSession>) clientData.get(FINISHED_SESSIONS);
-        return finishedSessions.size();
+        return new RidesAmount(finishedSessions.size());
     }
 
     public static void addRentSessionToData(RentSession rentSession, HashMap<String, Object> clientData) {

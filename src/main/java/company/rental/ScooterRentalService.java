@@ -29,7 +29,7 @@ public class ScooterRentalService {
         HashMap<String, Object> clientData = testDB.getClientData(clientId.id());
         HashMap<String, Object> scooterData = testDB.getScooterData(scooterId.id());
 
-        int ridesAmount = testDB.getFinishedRentSessionsAmount(clientData);
+        final var ridesAmount = testDB.getFinishedRentSessionsAmount(clientData);
 
         final var currentRentSession = (RentSession) clientData.get(CURRENT_RENT_SESSION);
         final var closedCurrentRentSession = RentSession.closeSession(currentRentSession);

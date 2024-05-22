@@ -7,14 +7,11 @@ import company.maintanace.Longitude;
 import company.maintanace.Position;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import static company.repository.TestDB.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mockStatic;
 
 class ScooterRentalServiceTest extends BaseTest {
 
