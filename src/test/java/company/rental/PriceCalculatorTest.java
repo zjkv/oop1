@@ -22,7 +22,7 @@ class PriceCalculatorTest extends BaseTest {
         final var regularPrice = PriceCalculator.calculate(scooterData, isImmediatePayment, minutes, priceAmountClientMultiplicationFactor, Subscription.ZERO_TO_NINE, new RidesAmount(8));
         //using ten_to_nineteen rents subscription - multiplier of discount * 0.9
         final var priceWith0Point9Multiplier = PriceCalculator.calculate(scooterData, isImmediatePayment, minutes, priceAmountClientMultiplicationFactor, Subscription.TEN_TO_NINETEEN, new RidesAmount(12));
-        assertEquals(0.9f, priceWith0Point9Multiplier / regularPrice, 0.0001f);
+        assertEquals(1 * 0.9f, priceWith0Point9Multiplier / regularPrice, 0.0001f);
 
     }
 

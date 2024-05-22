@@ -2,6 +2,7 @@ package company.rental;
 
 import company.ClientId;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public record RentSession(ClientId clientId, ScooterId scooterId, LocalDateTime startTime, LocalDateTime endTime) {
@@ -16,5 +17,9 @@ public record RentSession(ClientId clientId, ScooterId scooterId, LocalDateTime 
         } else {
             throw new RuntimeException("No active rent session to be closed");
         }
+    }
+
+    public static UsageTime calculateUsageTimeFromRentSession(RentSession rentSession) {
+        return new UsageTime((int) Duration.between(rentSession.startTime(), rentSession.endTime()).toMinutes());
     }
 }

@@ -5,6 +5,7 @@ import company.ClientId;
 import company.maintanace.Latitude;
 import company.maintanace.Longitude;
 import company.maintanace.Position;
+import company.repository.TestDB;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,8 @@ import static company.repository.TestDB.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ScooterRentalServiceTest extends BaseTest {
+
+    private final ScooterRentalService scooterRentalService = new ScooterRentalService(testDB);
 
     @Test
     void shouldDo() {
@@ -30,12 +33,12 @@ class ScooterRentalServiceTest extends BaseTest {
         int expectedTransactionCounter = 33;
 
         //when
-        ScooterRentalService.rentScooter(clientId, scooterId, testDB);
-        ScooterRentalService.returnScooter(clientId, scooterId, position, testDB); //I put there ref to test Db just to use only one. xD It is lets say quick fix
+        scooterRentalService.rentScooter(clientId, scooterId);
+        scooterRentalService.returnScooter(clientId, scooterId, position); //I put there ref to test Db just to use only one. xD It is lets say quick fix
 
 
         //then
-        HashMap<String, Object> clientData = testDB.getClientData(clientId.id());
+        HashMap<String, Object> clientData = testDB.getClientData(clientId);
         assertEquals(expectedLoyaltyPoints, clientData.get(LOYALTY_POINTS));
         assertEquals(expectedChargeAmount, clientData.get(CHARGE_AMOUNT));
         assertEquals(expectedTransactionCounter, clientData.get(IMMEDIATE_TRANSACTIONS_COUNTER));
@@ -55,13 +58,13 @@ class ScooterRentalServiceTest extends BaseTest {
         Position position = new Position(latitude, longitude); //Position Value object
 
         //when
-        ScooterRentalService.rentScooter(clientId, scooterId, testDB);
-        ScooterRentalService.returnScooter(clientId, scooterId, position, testDB); //I put there ref to test Db just to use only one. xD It is lets say quick fix
+        scooterRentalService.rentScooter(clientId, scooterId);
+        scooterRentalService.returnScooter(clientId, scooterId, position); //I put there ref to test Db just to use only one. xD It is lets say quick fix
 
 
         //expected
         assertThrows(RuntimeException.class,
-                () -> ScooterRentalService.returnScooter(clientId, scooterId, position, testDB));
+                () -> scooterRentalService.returnScooter(clientId, scooterId, position));
         // assertEquals(expectedNeedsToChargeBattery, clientData.get(NEEDS_TO_CHARGE_BATTERY)); //not set up
 
     }
@@ -73,14 +76,14 @@ class ScooterRentalServiceTest extends BaseTest {
         ScooterId scooterId = new ScooterId(100L);
 
         //when
-        var clientData = testDB.getClientData(clientId.id());
+        var clientData = testDB.getClientData(clientId);
 
         //then
         //scooter jeszcze nie wypozyczony, obecna sesja pusta
         assertNull(clientData.get(CURRENT_RENT_SESSION));
 
         //when
-        ScooterRentalService.rentScooter(clientId, scooterId, testDB);
+        scooterRentalService.rentScooter(clientId, scooterId);
         final var expectedRentSession = RentSession.createSession(clientId, scooterId);
         final var actualRentSessionAfterRental = (RentSession) clientData.get(CURRENT_RENT_SESSION);
 

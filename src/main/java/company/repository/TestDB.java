@@ -18,6 +18,7 @@ public class TestDB {
     public static final String CLIENT_WITH_IMMEDIATE_PAYMENT = "clientWithImmediatePayment";
     public static final String CLIENT_CREDIT = "clientCredit";
     public static final String IMMEDIATE_TRANSACTIONS_COUNTER = "immediateTransactionsCounter";
+    public static final String PRICE_AMOUNT_CLIENT_MULTIPLICATION_FACTOR = "priceAmountClientMultiplicationFactor";
     public static final String SUBSCRIPTION = "subscription";
     public static final String CURRENT_RENT_SESSION = "current_rent_session";
     public static final String FINISHED_SESSIONS = "finished_sessions";
@@ -45,13 +46,16 @@ public class TestDB {
         clientData.put(CLIENT_CREDIT, 123.23f);
         clientData.put(CLIENT_WITH_IMMEDIATE_PAYMENT, true);
         clientData.put(IMMEDIATE_TRANSACTIONS_COUNTER, 32);
+        clientData.put(PRICE_AMOUNT_CLIENT_MULTIPLICATION_FACTOR, 0.9f);
         clientData.put(SUBSCRIPTION, TEN_TO_NINETEEN);
 
         final var finishedSessions = new ArrayList<RentSession>();
         finishedSessions.add(
-                new RentSession(new ClientId(clientId), new ScooterId(scooterId), of(2024, 5, 19, 18, 40), of(2024, 5, 19, 18, 50)));
+                new RentSession(new ClientId(clientId), new ScooterId(scooterId), of(2024, 4, 19, 18, 40), of(2024, 4, 19, 18, 50)));
         finishedSessions.add(
-                new RentSession(new ClientId(clientId), new ScooterId(scooterId), of(2024, 5, 19, 18, 55), of(2024, 5, 19, 19, 05)));
+                new RentSession(new ClientId(clientId), new ScooterId(scooterId), of(2024, 4, 19, 18, 55), of(2024, 4, 19, 19, 5)));
+        finishedSessions.add(
+                new RentSession(new ClientId(clientId), new ScooterId(scooterId), of(2024, 5, 19, 18, 55), of(2024, 5, 19, 19, 5)));
         clientData.put(FINISHED_SESSIONS, finishedSessions);
 
         // load client data db
@@ -73,19 +77,14 @@ public class TestDB {
         return db;
     }
 
-    public HashMap<String, Object> getClientData(Long clientId){
+    public HashMap<String, Object> getClientData(ClientId clientId){
         //check if exist etc..
-        return getDb().get(clientId);
+        return getDb().get(clientId.id());
     }
 
-    public HashMap<String, Object> getScooterData(Long scooterId){
+    public HashMap<String, Object> getScooterData(ScooterId scooterId){
         //check if exist etc..
-        return getDb().get(scooterId);
-    }
-
-    public RidesAmount getFinishedRentSessionsAmount(HashMap<String, Object> clientData) {
-        var finishedSessions = (ArrayList<RentSession>) clientData.get(FINISHED_SESSIONS);
-        return new RidesAmount(finishedSessions.size());
+        return getDb().get(scooterId.id());
     }
 
     public static void addRentSessionToData(RentSession rentSession, HashMap<String, Object> clientData) {
@@ -94,8 +93,8 @@ public class TestDB {
         clientData.put(FINISHED_SESSIONS, finishedRides);
     }
 
-    public HashMap<String, Object> storeClientData(Long clientId, HashMap<String, Object> data){
+    public HashMap<String, Object> storeClientData(ClientId clientId, HashMap<String, Object> data){
         //update data, ofc we can do here validation etc.
-        return db.put(clientId, data);
+        return db.put(clientId.id(), data);
     }
 }

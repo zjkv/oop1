@@ -2,23 +2,23 @@ package company.rental;
 
 import company.maintanace.Battery;
 import company.repository.Database;
+import company.repository.TestDB;
 
 import java.util.HashMap;
 
-class Scooter {
+public class Scooter {
 
-    ScooterId scooterId;
+    final ScooterId scooterId;
+    final TestDB testDB;
+    final Object[] scooterData;
+    final float batteryLevel;
 
-    Object[] scooterData;
-
-    float batteryLevel;
-
-    public Scooter(ScooterId scooterId) {
-        HashMap<String, Object> database = new Database().getData();
-
+    public Scooter(ScooterId scooterId, TestDB testDB) {
         this.scooterId = scooterId;
-        this.scooterData = (Object[]) database.get("scooterData");
-        this.batteryLevel = (float) database.get("batteryLevel");
+        this.testDB = testDB;
+        HashMap<String, Object> scooterData = testDB.getScooterData(scooterId);
+        this.scooterData = (Object[]) scooterData.get("scooterData");
+        this.batteryLevel = (float) scooterData.get("batteryLevel");
     }
 
     public boolean needsToChargeBattery() {

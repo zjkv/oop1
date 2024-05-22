@@ -2,65 +2,67 @@ package company.rental;
 
 import company.Client;
 import company.ClientId;
-import company.Subscription;
 import company.loyality.Loyalty;
 import company.maintanace.Position;
 import company.repository.TestDB;
 
 import java.util.HashMap;
 
-import static company.rental.UsageTime.calculateUsageTimeFromRentSession;
+import static company.rental.RentSession.calculateUsageTimeFromRentSession;
 import static company.repository.TestDB.*;
 
 public class ScooterRentalService {
 
-    private final TestDB testDB = new TestDB();
+    private final TestDB testDB;
 
-    public static void rentScooter(ClientId clientId, ScooterId scooterId, TestDB testDB) {
-        HashMap<String, Object> clientData = testDB.getClientData(clientId.id());
-
-        final var rentSession = RentSession.createSession(clientId, scooterId);
-        clientData.put(CURRENT_RENT_SESSION, rentSession);
-        testDB.storeClientData(clientId.id(), clientData);
+    public ScooterRentalService(TestDB testDB) {
+        this.testDB = testDB;
     }
 
-    public static void returnScooter(ClientId clientId, ScooterId scooterId, Position position, TestDB testDB) {
+    public void rentScooter(ClientId clientId, ScooterId scooterId) {
+        final var rentSession = RentSession.createSession(clientId, scooterId);
 
-        HashMap<String, Object> clientData = testDB.getClientData(clientId.id());
-        HashMap<String, Object> scooterData = testDB.getScooterData(scooterId.id());
+        HashMap<String, Object> clientData = testDB.getClientData(clientId);
+        clientData.put(CURRENT_RENT_SESSION, rentSession);
+        testDB.storeClientData(clientId, clientData);
+    }
 
-        final var ridesAmount = testDB.getFinishedRentSessionsAmount(clientData);
+    public void returnScooter(ClientId clientId, ScooterId scooterId, Position position) {
+        Client client = new Client(clientId, testDB);
+        Scooter scooter = new Scooter(scooterId, testDB);
 
-        final var currentRentSession = (RentSession) clientData.get(CURRENT_RENT_SESSION);
+        final var currentRentSession = client.getCurrentRentSession();
         final var closedCurrentRentSession = RentSession.closeSession(currentRentSession);
 
         //I moved UsageTime from method parameters to be calculated by values from current rent session
         final var usageTime = calculateUsageTimeFromRentSession(closedCurrentRentSession);
-
-        Subscription subscription = (Subscription) clientData.get(SUBSCRIPTION);
-
-        float priceAmountClientMultiplicationFactor = 0.9f;  //this can be takes from db eg from Client props, different clients differt multifactors
-
-        float chargeAmount = PriceCalculator.calculate((Object[]) scooterData.get(SCOOTER_DATA), (Boolean) clientData.get(CLIENT_WITH_IMMEDIATE_PAYMENT), usageTime, priceAmountClientMultiplicationFactor, subscription, ridesAmount);
+        float priceAmountClientMultiplicationFactor = client.getPriceAmountClientMultiplicationFactor();
+        float chargeAmount = PriceCalculator.calculate(
+                scooter.scooterData,
+                client.isClientWithImmediatePayment(),
+                usageTime,
+                priceAmountClientMultiplicationFactor,
+                client.getSubscription(),
+                client.getRidesAmountForCurrentMonth()
+        );
 
         chargeClient(clientId, chargeAmount);
-
-        Client client = new Client(clientId); //this should be get from db, in place of 31 line
         client.immediateTransactionsIncrease();
-        clientData.put(IMMEDIATE_TRANSACTIONS_COUNTER, client.getImmediateTransactionsCounter());
-        clientData.put(LOYALTY_POINTS, Loyalty.calculate(usageTime, priceAmountClientMultiplicationFactor, chargeAmount, subscription));
+
+        //save
+        HashMap<String, Object> clientData = testDB.getClientData(clientId);
+        clientData.put(IMMEDIATE_TRANSACTIONS_COUNTER, client.getImmediateTransactionsCounter().getCounter());
+        clientData.put(LOYALTY_POINTS, Loyalty.calculate(usageTime, priceAmountClientMultiplicationFactor, chargeAmount, client.getSubscription()));
         clientData.put(CHARGE_AMOUNT, chargeAmount);
         addRentSessionToData(closedCurrentRentSession, clientData);
-
-        //clear current rent session
         clientData.put(CURRENT_RENT_SESSION, null);
-
-        testDB.storeClientData(clientId.id(), clientData);
+        testDB.storeClientData(clientId, clientData);
     }
 
     private static void chargeClient(ClientId clientId, float chargeAmount) {
         //obciążenie karty kredytowej
     }
-
 }
+    // SZKIELET dla tworzenia listy do wyliczania price factoringu w ujeciu miesiecznym
+
 
