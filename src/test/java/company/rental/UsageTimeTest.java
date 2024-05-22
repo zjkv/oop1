@@ -23,7 +23,7 @@ class UsageTimeTest {
         var exception = assertThrows(RuntimeException.class,
                 () -> new UsageTime(-5));
         //check error message:
-        assertEquals("Usage time cannot be les than 0", exception.getMessage());
+        assertEquals("Usage time cannot be less than 0", exception.getMessage());
 
     }
 }

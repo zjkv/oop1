@@ -1,23 +1,22 @@
 package company.rental;
 
 import company.BaseTest;
-import company.Client;
 import company.ClientId;
 import company.maintanace.Latitude;
 import company.maintanace.Longitude;
 import company.maintanace.Position;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import static company.repository.TestDB.CHARGE_AMOUNT;
-import static company.repository.TestDB.IMMEDIATE_TRANSACTIONS_COUNTER;
-import static company.repository.TestDB.LOYALTY_POINTS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static company.repository.TestDB.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
-class ReturnScooterServiceTest extends BaseTest {
+class ScooterRentalServiceTest extends BaseTest {
 
     @Test
     void shouldDo() {
@@ -26,17 +25,16 @@ class ReturnScooterServiceTest extends BaseTest {
         ScooterId scooterId = new ScooterId(100L);
         Longitude longitude = new Longitude(15F);
         Latitude latitude = new Latitude(50F);
-        UsageTime minutes = new UsageTime(15);
 
         Position position = new Position(latitude, longitude); //Position Value object
 
         int expectedLoyaltyPoints = 0;
-        float expectedChargeAmount = 28f;
-        boolean expectedNeedsToChargeBattery = true;
+        float expectedChargeAmount = 1f;
         int expectedTransactionCounter = 33;
 
         //when
-        ReturnScooterService.returnScooter(clientId, scooterId, position, minutes, testDB); //I put there ref to test Db just to use only one. xD It is lets say quick fix
+        ScooterRentalService.rentScooter(clientId, scooterId, testDB);
+        ScooterRentalService.returnScooter(clientId, scooterId, position, testDB); //I put there ref to test Db just to use only one. xD It is lets say quick fix
 
 
         //then
@@ -44,7 +42,6 @@ class ReturnScooterServiceTest extends BaseTest {
         assertEquals(expectedLoyaltyPoints, clientData.get(LOYALTY_POINTS));
         assertEquals(expectedChargeAmount, clientData.get(CHARGE_AMOUNT));
         assertEquals(expectedTransactionCounter, clientData.get(IMMEDIATE_TRANSACTIONS_COUNTER));
-        // assertEquals(expectedNeedsToChargeBattery, clientData.get(NEEDS_TO_CHARGE_BATTERY)); //not set up
 
     }
 
@@ -56,36 +53,43 @@ class ReturnScooterServiceTest extends BaseTest {
         ScooterId scooterId = new ScooterId(100L);
         Longitude longitude = new Longitude(2F); //Cords not from poland
         Latitude latitude = new Latitude(3F);
-        UsageTime minutes = new UsageTime(15);
 
         //line bellow thorw exception
         Position position = new Position(latitude, longitude); //Position Value object
 
         //when
-        ReturnScooterService.returnScooter(clientId, scooterId, position, minutes, testDB); //I put there ref to test Db just to use only one. xD It is lets say quick fix
+        ScooterRentalService.rentScooter(clientId, scooterId, testDB);
+        ScooterRentalService.returnScooter(clientId, scooterId, position, testDB); //I put there ref to test Db just to use only one. xD It is lets say quick fix
 
 
         //expected
         assertThrows(RuntimeException.class,
-                () -> ReturnScooterService.returnScooter(clientId, scooterId, position, minutes, testDB));
+                () -> ScooterRentalService.returnScooter(clientId, scooterId, position, testDB));
         // assertEquals(expectedNeedsToChargeBattery, clientData.get(NEEDS_TO_CHARGE_BATTERY)); //not set up
 
     }
 
     @Test
-    void shouldApplyDiscountBasedOnClientSubscriptionType() {
-        // given
-        // client jest typu subskrypcyjnego
-        // przejazd jest od 1 do 9
+    void shouldRentScooter() {
+        //given
+        ClientId clientId = new ClientId(1L);
+        ScooterId scooterId = new ScooterId(100L);
 
-        // when
-        // wyliczamy cene za przejazd
-        //
+        //when
+        var clientData = testDB.getClientData(clientId.id());
 
+        //then
+        //scooter jeszcze nie wypozyczony, obecna sesja pusta
+        assertNull(clientData.get(CURRENT_RENT_SESSION));
 
+        //when
+        ScooterRentalService.rentScooter(clientId, scooterId, testDB);
+        final var expectedRentSession = RentSession.createSession(clientId, scooterId);
+        final var actualRentSessionAfterRental = (RentSession) clientData.get(CURRENT_RENT_SESSION);
 
-
-        // then
-        // dla klienta subskrypcyjnego jest appliowana znizka 100% - przejazd gratis z powodu subskrpycji i darmowych przejazdow do 9
+        //then
+        //scooter wypozyczony
+        assertEquals(expectedRentSession.clientId(), actualRentSessionAfterRental.clientId());
+        assertEquals(expectedRentSession.scooterId(), actualRentSessionAfterRental.scooterId());
     }
 }

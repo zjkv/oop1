@@ -17,14 +17,6 @@ public enum Subscription {
         this.discountMultiplier = discountMultiplier;
     }
 
-    public int getMinRides() {
-        return minRides;
-    }
-
-    public int getMaxRides() {
-        return maxRides;
-    }
-
     public float getDiscountMultiplier() {
         return discountMultiplier;
     }

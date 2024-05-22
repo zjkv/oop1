@@ -1,8 +1,10 @@
 package company;
 
 import company.loyality.TransactionCounter;
+import company.rental.RentSession;
 import company.repository.TestDB;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static company.repository.TestDB.*;
@@ -18,7 +20,9 @@ public class Client {
 
     final TransactionCounter immediateTransactionsCounter;
 
-//    final RideAmount rideAmount;
+    final RentSession currentRentSession;
+
+    final ArrayList<RentSession> finishedRentSessions;
 
 
     public Client(ClientId clientId) {
@@ -31,6 +35,8 @@ public class Client {
         this.clientWithImmediatePayment = (boolean) clientData.get(CLIENT_WITH_IMMEDIATE_PAYMENT);
         this.immediateTransactionsCounter = new TransactionCounter((int) clientData.get(IMMEDIATE_TRANSACTIONS_COUNTER));
         this.subscription = (Subscription) clientData.get(SUBSCRIPTION);
+        this.currentRentSession = (RentSession) clientData.get(CURRENT_RENT_SESSION);
+        this.finishedRentSessions = (ArrayList<RentSession>) clientData.get(FINISHED_SESSIONS);
     }
 
     public void immediateTransactionsIncrease() {
@@ -54,5 +60,9 @@ public class Client {
 
     public Subscription getSubscription() {
         return subscription;
+    }
+
+    public ArrayList<RentSession> getFinishedRentSessions() {
+        return finishedRentSessions;
     }
 }
