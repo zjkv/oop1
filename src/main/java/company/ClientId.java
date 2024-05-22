@@ -1,5 +1,7 @@
-public record ScooterId(Long id) {
-    public ScooterId {
+package company;
+
+public record ClientId(Long id) {
+    public ClientId {
         if (id == null) {
             throw new RuntimeException("Id cant be null");
         }

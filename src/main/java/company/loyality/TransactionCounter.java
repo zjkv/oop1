@@ -1,3 +1,5 @@
+package company.loyality;
+
 public class TransactionCounter {
 
     private int counter;
