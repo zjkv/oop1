@@ -7,7 +7,7 @@ public record UsageTime(Integer minutes) {
         }
 
         if (minutes < 0) {
-            throw new RuntimeException("Usage time cannot be les than 0");
+            throw new RuntimeException("Usage time cannot be less than 0");
         }
     }
 }

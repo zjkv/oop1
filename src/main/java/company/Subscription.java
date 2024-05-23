@@ -1,5 +1,7 @@
 package company;
 
+import company.rental.RidesAmount;
+
 public enum Subscription {
 
     ZERO_TO_NINE(0, 9, 1f),
@@ -17,19 +19,11 @@ public enum Subscription {
         this.discountMultiplier = discountMultiplier;
     }
 
-    public int getMinRides() {
-        return minRides;
-    }
-
-    public int getMaxRides() {
-        return maxRides;
-    }
-
     public float getDiscountMultiplier() {
         return discountMultiplier;
     }
 
-    public static boolean isRidesAmountInSubscriptionRange(int ridesAmount, Subscription subscription) {
-        return ridesAmount >= subscription.minRides && ridesAmount <= subscription.maxRides;
+    public static boolean isRidesAmountInSubscriptionRange(RidesAmount ridesAmount, Subscription subscription) {
+        return ridesAmount.amount() >= subscription.minRides && ridesAmount.amount() <= subscription.maxRides;
     }
 }
