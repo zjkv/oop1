@@ -64,7 +64,7 @@ public class Client {
         return currentRentSession;
     }
 
-    public RidesAmount getFinishedRentSessions() {
+    public RidesAmount getRidesAmount() {
         return new RidesAmount(finishedRentSessions.size());
     }
 
@@ -72,9 +72,13 @@ public class Client {
         return new RidesAmount(getFinishedRentSessionsForCurrentMonth().size());
     }
 
+    public List<RentSession> getFinishedRentSessions() {
+        return finishedRentSessions;
+    }
+
     public List<RentSession> getFinishedRentSessionsForCurrentMonth() {
         final var currentMonth = LocalDateTime.now().getMonth();
-        return finishedRentSessions.stream().filter(rentSession -> rentSession.endTime().getMonth() == currentMonth).toList();
+        return finishedRentSessions.stream().filter(rentSession -> rentSession.endTime().getMonth().equals(currentMonth)).toList();
     }
 
     // getFinishedRentSessionForGivenMonth() - zaimplementuj

@@ -1,17 +1,18 @@
 package company.rental;
 
 import company.BaseTest;
+import company.Client;
 import company.ClientId;
 import company.maintanace.Latitude;
 import company.maintanace.Longitude;
 import company.maintanace.Position;
-import company.repository.TestDB;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
 import static company.repository.TestDB.*;
+import static java.time.LocalDateTime.now;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ScooterRentalServiceTest extends BaseTest {
@@ -91,5 +92,21 @@ class ScooterRentalServiceTest extends BaseTest {
         //scooter wypozyczony
         assertEquals(expectedRentSession.clientId(), actualRentSessionAfterRental.clientId());
         assertEquals(expectedRentSession.scooterId(), actualRentSessionAfterRental.scooterId());
+    }
+
+    @Test
+    void shouldDifferentiateBetweenAllAndCurrentMonthFinishedRentSessions() {
+        //given
+        ClientId clientId = new ClientId(1L);
+        Client client = new Client(clientId, testDB);
+        final var finishedRentSessions = client.getFinishedRentSessions();
+
+        //when
+        final var finishedRentSessionsInCurrentMonth = finishedRentSessions.stream().filter(
+                rentSession -> rentSession.endTime().getMonth().equals(now().getMonth())).toList();
+
+        //then
+        assertNotEquals(finishedRentSessionsInCurrentMonth.size(), finishedRentSessions.size());
+        assertEquals(finishedRentSessionsInCurrentMonth.size(), client.getRidesAmountForCurrentMonth().amount());
     }
 }

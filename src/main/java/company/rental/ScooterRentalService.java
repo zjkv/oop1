@@ -34,26 +34,24 @@ public class ScooterRentalService {
         final var currentRentSession = client.getCurrentRentSession();
         final var closedCurrentRentSession = RentSession.closeSession(currentRentSession);
 
-        //I moved UsageTime from method parameters to be calculated by values from current rent session
         final var usageTime = calculateUsageTimeFromRentSession(closedCurrentRentSession);
-        float priceAmountClientMultiplicationFactor = client.getPriceAmountClientMultiplicationFactor();
-        float chargeAmount = PriceCalculator.calculate(
+        Price price = PriceCalculator.calculate(
                 scooter.scooterData,
                 client.isClientWithImmediatePayment(),
                 usageTime,
-                priceAmountClientMultiplicationFactor,
+                client.getPriceAmountClientMultiplicationFactor(),
                 client.getSubscription(),
                 client.getRidesAmountForCurrentMonth()
         );
 
-        chargeClient(clientId, chargeAmount);
+        chargeClient(clientId, price.amount());
         client.immediateTransactionsIncrease();
 
         //save
         HashMap<String, Object> clientData = testDB.getClientData(clientId);
         clientData.put(IMMEDIATE_TRANSACTIONS_COUNTER, client.getImmediateTransactionsCounter().getCounter());
-        clientData.put(LOYALTY_POINTS, Loyalty.calculate(usageTime, priceAmountClientMultiplicationFactor, chargeAmount, client.getSubscription()));
-        clientData.put(CHARGE_AMOUNT, chargeAmount);
+        clientData.put(LOYALTY_POINTS, Loyalty.calculate(usageTime, client.getPriceAmountClientMultiplicationFactor(), price.amount(), client.getSubscription()));
+        clientData.put(CHARGE_AMOUNT, price.amount());
         addRentSessionToData(closedCurrentRentSession, clientData);
         clientData.put(CURRENT_RENT_SESSION, null);
         testDB.storeClientData(clientId, clientData);
@@ -63,6 +61,6 @@ public class ScooterRentalService {
         //obciążenie karty kredytowej
     }
 }
-    // SZKIELET dla tworzenia listy do wyliczania price factoringu w ujeciu miesiecznym
+// SZKIELET dla tworzenia listy do wyliczania price factoringu w ujeciu miesiecznym
 
 

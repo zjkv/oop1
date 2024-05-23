@@ -1,7 +1,6 @@
 package company.rental;
 
 import company.maintanace.Battery;
-import company.repository.Database;
 import company.repository.TestDB;
 
 import java.util.HashMap;

@@ -7,6 +7,12 @@ import java.time.LocalDateTime;
 
 public record RentSession(ClientId clientId, ScooterId scooterId, LocalDateTime startTime, LocalDateTime endTime) {
 
+    public RentSession {
+        if (endTime!=null && endTime.isBefore(startTime)) {
+            throw new RuntimeException("End time cant be earlier than start time");
+        }
+    }
+
     public static RentSession createSession(ClientId clientId, ScooterId scooterId) {
         return new RentSession(clientId, scooterId, LocalDateTime.now(), null);
     }
